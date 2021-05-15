@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { ApiService } from 'src/app/utility/api.service';
+import { Constant } from 'src/app/utility/constant';
 import { PostInterface } from '../interface/post-interface';
 
 @Injectable({
@@ -8,9 +10,18 @@ import { PostInterface } from '../interface/post-interface';
 export class PostService {
   private posts: PostInterface[] = [];
   private postsUpdated = new Subject<PostInterface[]>();
-  constructor() { }
+  constructor(private apiService: ApiService) { }
 
   getPosts(): PostInterface[]{
+    this.apiService.get(Constant.getPostAPI).subscribe((res)=>{
+      if(res.status)
+        this.posts = res.posts;
+        this.postsUpdated.next(this.returnPosts());
+    });
+    return [...this.posts];
+  }
+
+  returnPosts(): PostInterface[] {
     return [...this.posts];
   }
 
@@ -24,6 +35,9 @@ export class PostService {
       description: content
     }
     this.posts.push(post);
-    this.postsUpdated.next(this.getPosts());
+    this.apiService.post(Constant.savePostAPI,post).subscribe((res)=> {
+      console.log(res);
+    });
+    this.postsUpdated.next(this.returnPosts());
   }
 }

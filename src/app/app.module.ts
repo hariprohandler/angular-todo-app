@@ -16,6 +16,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './posts/header/header/header.component';
 import { PostListComponent } from './posts/post-list/post-list/post-list.component';
 import { PostService } from './posts/service/post-service.service';
+import { ApiService } from './utility/api.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -34,10 +36,12 @@ import { PostService } from './posts/service/post-service.service';
     MatCardModule,
     MatToolbarModule,
     MatExpansionModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule
   ],
   providers: [
-    PostService
+    PostService,
+    ApiService
   ],
   bootstrap: [AppComponent],
   exports:[
